@@ -31,9 +31,17 @@
               </div>
               <div class="bonus-coins">
                 <div class="bonus-coin gold-coin" *ngIf="game.goldCoins > 0 && i == 0">
+                  <span class="fa-stack">
+                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-dollar fa-stack-1x"></i>
+                  </span>
                   {{ game.goldCoins }} Gold
                 </div>
                 <div class="bonus-coin silver-coin" *ngIf="(i == 1 && game.silverCoins > 0 && game.goldCoins > 0) || (i == 0 && game.goldCoins <= 0)">
+                  <span class="fa-stack">
+                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-dollar fa-stack-1x"></i>
+                  </span>
                   {{ game.silverCoins }} Silver
                 </div>
               </div>
@@ -158,10 +166,18 @@
               </div>
               <div class="player-coins">
                 <div class="bonus-coin gold-coin">
+                  <span class="fa-stack">
+                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-dollar fa-stack-1x"></i>
+                  </span>
                   {{ player.goldCoins }} Gold
                 </div>
                 &
                 <div class="bonus-coin silver-coin">
+                  <span class="fa-stack">
+                    <i class="fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-dollar fa-stack-1x"></i>
+                  </span>
                   {{ player.silverCoins }} Silver
                 </div>
               </div>

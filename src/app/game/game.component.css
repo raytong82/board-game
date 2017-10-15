@@ -120,10 +120,15 @@
   margin-right: 5px;
 }
 
+.trade-bonus {
+  margin-bottom: 20px;
+}
+
 .bonus-spice {
   display: block;
   border-style: dotted;
-  border-width: 3px;
+  border-width: 2px;
+  text-align: center;
   margin-left: 5px;
   margin-right: 5px;
 }
