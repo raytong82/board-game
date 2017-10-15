@@ -7,6 +7,7 @@
       <ng-template #playing>
         <div class="panel-heading">
           Score Cards
+          <button type="button" class="btn btn-default game-reset" (click)="resetGame()">RESET</button>
         </div>
         <div class="panel-body">
           <div class="score-cards">
@@ -109,7 +110,7 @@
               </div>
               <div class="trade-up" *ngIf="tradeCard.up">
                 <div class="trade-spice spice-up" *ngFor="let up of (tradeCard.up | num2Array)">
-                  &nbsp;<i class="fa fa-arrow-up" aria-hidden="true"></i>&nbsp;
+                  <i class="fa fa-arrow-up" aria-hidden="true"></i>
                 </div>
               </div>
             </div>
@@ -127,10 +128,10 @@
               {{ player.user }}
               <div class="player-message player-turn" *ngIf="game.playerTurn == player.user">
                 TURN <i class="fa fa-hand-o-left" aria-hidden="true"></i> <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                <p class="player-message player-up-count" *ngIf="upCount > 0"> CLICK spice {{ upCount }} times</p>
-                <p class="player-message player-up-done" *ngIf="upCount > 0" (click)="doneUpSpice()"> [FINISH UPGRADE]</p>
+                <p class="player-message player-up-count" *ngIf="upCount > 0"> CLICK spice {{ upCount }} times to UPGRADE OR </p>
+                <button type="button" class="btn btn-default player-message player-up-done" *ngIf="upCount > 0" (click)="doneUpSpice()">FINISH</button>
                 <p class="player-message player-to-count" *ngIf="maxTo > 0"> MAX {{ maxTo }} set to change</p>
-                <p class="player-message player-to-set" *ngFor="let set of (maxTo | num2Array)" (click)="toSpice(set+1)">{{ set + 1 }}</p>
+                <button type="button" class="btn btn-default player-message player-to-set" *ngFor="let set of (maxTo | num2Array)" (click)="toSpice(set+1)">{{ set + 1 }}</button>
                 <p class="player-message player-discard-spice" *ngIf="moreThan10Spice(player.spice)"> DISCARD down to 10 spices</p>
                 <p class="player-message player-handicap" *ngIf="requiredHandicap > 0"> DISCARD {{ requiredHandicap }} spices to pick your trade card</p>
               </div>
@@ -163,6 +164,9 @@
                 <div class="bonus-coin silver-coin">
                   {{ player.silverCoins }} Silver
                 </div>
+              </div>
+              <div class="player-score">
+                Total Score: {{ calTotalScore(player) }}
               </div>
               <div class="player-score-cards">
                 <div class="score-card player-score-card" *ngFor="let scoreCard of player.scoreCards">
@@ -234,7 +238,7 @@
                   </div>
                   <div class="trade-up" *ngIf="tradeCard.up">
                     <div class="trade-spice spice-up" *ngFor="let up of (tradeCard.up | num2Array)">
-                      &nbsp;<i class="fa fa-arrow-up" aria-hidden="true"></i>&nbsp;
+                      <i class="fa fa-arrow-up" aria-hidden="true"></i>
                     </div>
                   </div>
                 </div>
@@ -288,16 +292,16 @@
                   </div>
                   <div class="trade-up" *ngIf="tradeCard.up">
                     <div class="trade-spice spice-up" *ngFor="let up of (tradeCard.up | num2Array)">
-                      &nbsp;<i class="fa fa-arrow-up" aria-hidden="true"></i>&nbsp;
+                      <i class="fa fa-arrow-up" aria-hidden="true"></i>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="player-actions">
                 <div class="player-action">
-                  <div class="clear-trade-cards" (click)="clearTradeCards()">
+                  <button type="button" class="btn btn-default clear-trade-cards" (click)="clearTradeCards()">
                     CLEAR trade cards
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>

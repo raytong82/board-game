@@ -98,31 +98,31 @@ var START_TRADE_CARDS = [
 {id: -2, up:2},
 ];
 
-var scoreCards = _.shuffle(SCORE_CARDS);
-var tradeCards = _.shuffle(TRADE_CARDS);
+//var scoreCards = _.shuffle(SCORE_CARDS);
+//var tradeCards = _.shuffle(TRADE_CARDS);
 
 //console.log("scoreCards:" + JSON.stringify(scoreCards));
 //console.log("");
 //console.log("tradeCards:" + JSON.stringify(tradeCards));
 //console.log("");
 
-var goldCoins = 4;
-var silverCoins = 4;
+//var goldCoins = 4;
+//var silverCoins = 4;
 
-var players = [];
-var playerTurn = "";
+//var players = [];
+//var playerTurn = "";
 
 var game = {
-  players: players,
+  players: [],
 };
 
 function initGame() {
-  scoreCards = _.shuffle(SCORE_CARDS);
-  tradeCards = _.shuffle(TRADE_CARDS);
-  goldCoins = 4;
-  silverCoins = 4;
-  players = _.shuffle(players);
-  playerTurn = players[0].user;
+  var scoreCards = _.shuffle(SCORE_CARDS);
+  var tradeCards = _.shuffle(TRADE_CARDS);
+  var goldCoins = 4;
+  var silverCoins = 4;
+  var players = _.shuffle(game.players);
+  var playerTurn = players[0].user;
   for (var i=0; i<players.length; i++) {
     var player = players[i];
     if (player.user == playerTurn) {
@@ -145,8 +145,8 @@ function initGame() {
    tradeCards: _.take(tradeCards, 6),
    publicScoreCards: _.drop(scoreCards, 5),
    publicTradeCards: _.drop(tradeCards, 6),
-   goldCoins: goldCoins,
-   silverCoins: silverCoins,
+   goldCoins: 4,
+   silverCoins: 4,
    players: players,
    playerTurn: playerTurn,
  };
@@ -212,23 +212,30 @@ io.on('connection', function (socket) {
   });
 
   socket.on('join-game', function (data) {
-    console.log(data);
-    if (!_.includes(_.map(players, 'user'), data.user)) {
+    console.log('join-game:' + JSON.stringify(data));
+    if (!_.includes(_.map(game.players, 'user'), data.user)) {
       game.players.push(data);
       io.emit('join-game', game);
     }
-    if (players.length == 2) {
+    if (game.players.length == 2) {
       initGame();
       io.emit('update-game', game);
     }
   });
 
   socket.on('rejoin-game', function (data) {
-    console.log(data);
+    console.log('rejoin-game:' + data);
     io.emit('join-game', game);
-    if (players.length == 2) {
+    if (game.players.length == 2) {
       io.emit('update-game', game);
     }
+  });
+
+  socket.on('reset-game', function (data) {
+    console.log('reset-game:' + JSON.stringify(data));
+//    players = [];
+    game = {players: []};
+    io.emit('reset-game', game);
   });
 
   socket.on('use-trade-card', function (data) {

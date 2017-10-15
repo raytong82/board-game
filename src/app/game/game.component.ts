@@ -47,11 +47,23 @@ export class GameComponent implements OnInit {
     if (this.user !== null) {
       this.socket.emit('rejoin-game', {});
     }
+
+    this.socket.on('reset-game', function (data) {
+      console.log('reset-game:' + JSON.stringify(data));
+      this.joined = false;
+      this.waiting = true;
+      this.user = null;
+      location.reload();
+    });
   }
 
   joinGame() {
     localStorage.setItem("user", this.user);
     this.socket.emit('join-game', {user: this.user});
+  }
+
+  resetGame() {
+    this.socket.emit('reset-game', {});
   }
 
   pickScoreCard(data) {
@@ -331,6 +343,16 @@ export class GameComponent implements OnInit {
       return;
     }
     this.socket.emit('clear-trade-cards', {user: this.user});
+  }
+
+  calTotalScore(player) {
+    var total = 0;
+    total += player.goldCoins * 3;
+    total += player.silverCoins;
+    for (var i=0; i<player.scoreCards.length; i++) {
+      total += player.scoreCards[i].score;
+    }
+    return total;
   }
 
   moreThan10Spice(spice) {
