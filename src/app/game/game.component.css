@@ -1,0 +1,182 @@
+.panel-body {
+  padding: 5px 5px 5px 5px;
+}
+
+.panel-heading {
+  padding: 5px 5px 5px 5px;
+}
+
+.inline-container {
+  display: inline;
+}
+
+.score-card {
+  display: inline-block;
+  vertical-align: top;
+  border-style: inset;
+  border-width: 3px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.spice {
+  display: block;
+}
+
+.score {
+  display: block;
+  text-align: center;
+}
+
+.score-spice {
+  display: inline-block;
+  border-style: groove;
+  border-width: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.spice-yellow {
+  background-color: #FFFF00;
+}
+
+.spice-red {
+  background-color: #FF0000;
+}
+
+.spice-green {
+  background-color: #00FF00;
+}
+
+.spice-brown {
+  background-color: #8B4513;
+}
+
+.spice-up {
+  background-color: #9E9E9E;
+}
+
+.spice-blank {
+  background-color: #EEEEEE;
+}
+
+.spice-from-to {
+  text-align: center;
+}
+
+.trade-card {
+  display: inline-block;
+  vertical-align: top;
+  border-style: inset;
+  border-width: 3px;
+  margin-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.trade-spice {
+  display: block;
+  border-style: groove;
+  border-width: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.bonus-spice {
+  display: block;
+  border-style: dotted;
+  border-width: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+
+.player {
+  margin-bottom: 10px;
+}
+
+.player-name {
+  background-color: #337AB7;
+  color: #FFFFFF;
+  border-style: dashed;
+  border-width: 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+.current-player {
+  background-color: #FF5722;
+}
+
+.player-message {
+  display: inline;
+}
+
+.player-turn {
+}
+
+.player-up-count {
+}
+
+.player-to-count {
+}
+
+.player-discard-spice {
+}
+
+.player-to-set {
+  display: inline;
+  border-style: groove;
+  padding: 0px 5px 0px 5px;
+  margin-left: 10px;
+}
+
+.player-data {
+  border-style: dashed;
+  border-width: 2px;
+  padding: 5px 5px 5px 5px;
+}
+
+.player-spices {
+  display: inline-block;
+  border-style: solid;
+  border-width: 2px;
+  padding: 2px 2px 2px 2px;
+}
+
+.player-spice {
+  display: inline-block;
+  border-style: groove;
+  border-width: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.player-coins {
+  display: inline-block;
+}
+
+.player-score-card {
+  background-color: #337AB7;
+}
+
+.player-used-trade-cards {
+  display: inline-block;
+}
+
+.player-hand-trade-cards {
+  display: inline-block;
+}
+
+.used-trade-card {
+  background-color: #337AB7;
+}
+
+.player-action {
+  display: inline-block;
+  border-style: solid;
+  border-width: 2px;
+  padding: 2px 2px 2px 2px;
+}
