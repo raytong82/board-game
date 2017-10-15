@@ -29,6 +29,26 @@
   text-align: center;
 }
 
+.bonus-coin {
+  font-weight: bold;
+}
+
+.gold-coin {
+  color: #FFD700;
+}
+
+.silver-coin {
+  color: #C0C0C0;
+}
+
+.bonus-coins > .bonus-coin {
+  text-align: center;
+}
+
+.player-coins > .bonus-coin {
+  display: inline;
+}
+
 .score-spice {
   display: inline-block;
   border-style: groove;

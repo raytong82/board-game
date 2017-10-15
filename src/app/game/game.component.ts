@@ -179,6 +179,21 @@ export class GameComponent implements OnInit {
     }
   }
 
+  doneUpSpice() {
+    console.log('doneUpSpice:');
+    if (this.user != this.game.playerTurn) {
+      return;
+    }
+    var that = this;
+    var player = _.find(this.game.players, function(player) {
+      return player.user == that.game.playerTurn;
+    });
+
+    this.upCount = 0;
+    this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+    this.pendingUseTradeCard = null;
+  }
+
   private upSpice(data, player) {
     console.log('upSpice:' + JSON.stringify(data));
     if (this.upCount <= 0) {

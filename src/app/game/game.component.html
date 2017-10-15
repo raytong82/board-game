@@ -10,23 +10,31 @@
         </div>
         <div class="panel-body">
           <div class="score-cards">
-            <div class="score-card" *ngFor="let scoreCard of game.scoreCards" (click)="pickScoreCard(scoreCard)">
+            <div class="score-card" *ngFor="let scoreCard of game.scoreCards; let i = index" (click)="pickScoreCard(scoreCard)">
               <div class="spice">
                 <div class="score-spice spice-yellow" *ngFor="let yellow of (scoreCard.yellow | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="score-spice spice-red" *ngFor="let red of (scoreCard.red | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="score-spice spice-green" *ngFor="let green of (scoreCard.green | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="score-spice spice-brown" *ngFor="let brown of (scoreCard.brown | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
               </div>
               <div class="score">
                 {{ scoreCard.score }}
+              </div>
+              <div class="bonus-coins">
+                <div class="bonus-coin gold-coin" *ngIf="game.goldCoins > 0 && i == 0">
+                  {{ game.goldCoins }} Gold
+                </div>
+                <div class="bonus-coin silver-coin" *ngIf="(game.silverCoins > 0 && i == 1) || (game.goldCoins <= 0 && i == 0)">
+                  {{ game.silverCoins }} Silver
+                </div>
               </div>
             </div>
             <div class="score-card">
@@ -42,30 +50,30 @@
             <div class="trade-card" *ngFor="let tradeCard of game.tradeCards" (click)="pickTradeCard(tradeCard)">
               <div class="trade-bonus" *ngIf="tradeCard.bonusSpices">
                 <div class="bonus-spice spice-yellow" *ngFor="let yellow of (tradeCard.bonusSpices.yellow | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="bonus-spice spice-red" *ngFor="let red of (tradeCard.bonusSpices.red | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="bonus-spice spice-green" *ngFor="let green of (tradeCard.bonusSpices.green | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="bonus-spice spice-brown" *ngFor="let brown of (tradeCard.bonusSpices.brown | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
               </div>
               <div class="trade-from" *ngIf="tradeCard.from | hasNonZeroProperty">
                 <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.from.yellow | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.from.red | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.from.green | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.from.brown | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="spice-from-to">
                   <i class="fa fa-long-arrow-down" aria-hidden="true"></i>
@@ -73,30 +81,30 @@
               </div>
               <div class="trade-to" *ngIf="tradeCard.to | hasNonZeroProperty">
                 <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.to.yellow | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.to.red | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.to.green | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.to.brown | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
               </div>
               <div class="trade-free" *ngIf="tradeCard.free | hasNonZeroProperty">
                 <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.free.yellow | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.free.red | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.free.green | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.free.brown | num2Array)">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
               </div>
               <div class="trade-up" *ngIf="tradeCard.up">
@@ -120,6 +128,7 @@
               <div class="player-message player-turn" *ngIf="game.playerTurn == player.user">
                 TURN <i class="fa fa-hand-o-left" aria-hidden="true"></i> <i class="fa fa-spinner fa-pulse fa-fw"></i>
                 <p class="player-message player-up-count" *ngIf="upCount > 0"> CLICK spice {{ upCount }} times</p>
+                <p class="player-message player-up-done" *ngIf="upCount > 0" (click)="doneUpSpice()"> [FINISH UPGRADE]</p>
                 <p class="player-message player-to-count" *ngIf="maxTo > 0"> MAX {{ maxTo }} set to change</p>
                 <p class="player-message player-to-set" *ngFor="let set of (maxTo | num2Array)" (click)="toSpice(set+1)">{{ set + 1 }}</p>
                 <p class="player-message player-discard-spice" *ngIf="moreThan10Spice(player.spice)"> DISCARD down to 10 spices</p>
@@ -129,40 +138,46 @@
             <div class="player-data">
               <div class="player-spices">
                 <div class="player-spice spice-yellow" *ngFor="let yellow of (player.spice.yellow | num2Array)" (click)="clickSpice('yellow')">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="player-spice spice-red" *ngFor="let red of (player.spice.red | num2Array)" (click)="clickSpice('red')">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="player-spice spice-green" *ngFor="let green of (player.spice.green | num2Array)" (click)="clickSpice('green')">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="player-spice spice-brown" *ngFor="let brown of (player.spice.brown | num2Array)" (click)="clickSpice('brown')">
-                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <i class="fa fa-cube" aria-hidden="true"></i>
                 </div>
                 <div class="inline-container" *ngIf="!moreThan10Spice(player.spice)">
                   <div class="player-spice spice-blank" *ngFor="let blank of ((10-(player.spice | sumOfProperty))|num2Array)">
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-cube" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
               <div class="player-coins">
-                  {{ player.goldCoins }} Gold & {{ player.silverCoins }} Silver
+                <div class="bonus-coin gold-coin">
+                  {{ player.goldCoins }} Gold
+                </div>
+                &
+                <div class="bonus-coin silver-coin">
+                  {{ player.silverCoins }} Silver
+                </div>
               </div>
               <div class="player-score-cards">
                 <div class="score-card player-score-card" *ngFor="let scoreCard of player.scoreCards">
                   <div class="spice">
                     <div class="score-spice spice-yellow" *ngFor="let yellow of (scoreCard.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="score-spice spice-red" *ngFor="let red of (scoreCard.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="score-spice spice-green" *ngFor="let green of (scoreCard.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="score-spice spice-brown" *ngFor="let brown of (scoreCard.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="score">
@@ -174,16 +189,16 @@
                 <div class="trade-card used-trade-card" *ngFor="let tradeCard of player.usedTradeCards">
                   <div class="trade-from" *ngIf="tradeCard.from | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.from.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.from.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.from.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.from.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="spice-from-to">
                       <i class="fa fa-long-arrow-down" aria-hidden="true"></i>
@@ -191,30 +206,30 @@
                   </div>
                   <div class="trade-to" *ngIf="tradeCard.to | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.to.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.to.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.to.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.to.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="trade-free" *ngIf="tradeCard.free | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.free.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.free.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.free.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.free.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="trade-up" *ngIf="tradeCard.up">
@@ -228,16 +243,16 @@
                 <div class="trade-card" *ngFor="let tradeCard of player.tradeCards" (click)="useTradeCard(tradeCard)">
                   <div class="trade-from" *ngIf="tradeCard.from | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.from.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.from.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.from.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.from.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div>
                       TO
@@ -245,30 +260,30 @@
                   </div>
                   <div class="trade-to" *ngIf="tradeCard.to | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.to.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.to.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.to.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.to.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="trade-free" *ngIf="tradeCard.free | hasNonZeroProperty">
                     <div class="trade-spice spice-yellow" *ngFor="let yellow of (tradeCard.free.yellow | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-red" *ngFor="let red of (tradeCard.free.red | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-green" *ngFor="let green of (tradeCard.free.green | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                     <div class="trade-spice spice-brown" *ngFor="let brown of (tradeCard.free.brown | num2Array)">
-                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
                   </div>
                   <div class="trade-up" *ngIf="tradeCard.up">

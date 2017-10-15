@@ -345,6 +345,24 @@ io.on('connection', function (socket) {
     player.spice.green -= data.scoreCard.green;
     player.spice.brown -= data.scoreCard.brown;
 
+    var scoreCardIndex = _.findIndex(game.scoreCards, function(scoreCard) {
+      return scoreCard.id == data.scoreCard.id;
+    });
+    if (scoreCardIndex == 0) {
+      if (game.goldCoins > 0) {
+        game.goldCoins -= 1;
+        player.goldCoins += 1;
+      } else if (game.silverCoins > 0) {
+        game.silverCoins -= 1;
+        player.silverCoins += 1;
+      }
+    } else if (scoreCardIndex == 1) {
+      if (game.goldCoins > 0 && game.silverCoins > 0) {
+        game.silverCoins -= 1;
+        player.silverCoins += 1;
+      }
+    }
+
     player.scoreCards.push(data.scoreCard);
     game.scoreCards = _.remove(game.scoreCards, function(scoreCard) {
       return scoreCard.id != data.scoreCard.id;
