@@ -5,6 +5,11 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var _ = require('lodash');
 
+if (!process.env.SERVER) {
+  console.log('not a server');
+  return;
+}
+
 // set the port of our application
 // process.env.PORT_EXPRESS lets the port be set by Heroku
 var port = process.env.PORT || 4000;

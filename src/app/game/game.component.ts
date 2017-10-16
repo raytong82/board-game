@@ -10,7 +10,7 @@ import _ from "lodash";
 })
 export class GameComponent implements OnInit {
 
-  socket = io(location.origin.replace(/^http/, 'ws') + '/server');
+  socket = io('http://ray-board-game-server.herokuapp.com');
   user: any;
   joined: boolean = false;
   waiting: boolean = true;
