@@ -314,7 +314,7 @@
                   </div>
                 </div>
               </div>
-              <div class="player-actions">
+              <div class="player-actions" *ngIf="user == player.user">
                 <div class="player-action">
                   <button type="button" class="btn btn-default clear-trade-cards" (click)="clearTradeCards()">
                     CLEAR trade cards

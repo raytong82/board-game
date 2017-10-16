@@ -72,6 +72,14 @@ export class GameComponent implements OnInit {
   }
 
   resetGame() {
+    console.log('reset-game');
+    if (this.user != this.game.playerTurn) {
+      return;
+    }
+    if (!_.includes(_.map(this.game.players, 'user'), this.user)) {
+      console.log('only players in game can reset game');
+      return;
+    }
     this.socket.emit('reset-game', {});
   }
 
