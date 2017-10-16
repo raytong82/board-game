@@ -9,7 +9,9 @@ var _ = require('lodash');
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 4000;
 
-server.listen(port, () -> console.log('app is running on port ' + port));
+server.listen(port, function() {
+  console.log('app is running on port ' + port)
+});
 
 var SCORE_CARDS = [
 {id:1, yellow:2,red:2,green:0,brown:0,score:6},
