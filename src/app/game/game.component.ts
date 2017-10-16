@@ -55,6 +55,15 @@ export class GameComponent implements OnInit {
       this.user = null;
       location.reload();
     });
+
+    this.socket.on('view-game', function (data) {
+      console.log('view-game:' + JSON.stringify(data));
+      this.joined = true;
+      this.waiting = false;
+      this.game = data;
+    });
+
+    this.socket.emit('view-game', {user: this.user});
   }
 
   joinGame() {

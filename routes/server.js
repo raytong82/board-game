@@ -242,6 +242,14 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on('view-game', function (data) {
+    console.log('view-game:' + data);
+    if (game.players.length == 2 && !_.includes(_.map(game.players, 'user'), data.user)) {
+      console.log('game is playing, view mode');
+      io.emit('view-game', game);
+    }
+  });
+
   socket.on('reset-game', function (data) {
     console.log('reset-game:' + JSON.stringify(data));
 //    players = [];
