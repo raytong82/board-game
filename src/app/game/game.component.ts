@@ -10,7 +10,7 @@ import _ from "lodash";
 })
 export class GameComponent implements OnInit {
 
-  socket = io(location.origin);
+  socket = io();
   user: any;
   joined: boolean = false;
   waiting: boolean = true;
