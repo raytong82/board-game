@@ -5,7 +5,11 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var _ = require('lodash');
 
-server.listen(4000);
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 4000;
+
+server.listen(port, () -> console.log('app is running on port ' + port));
 
 var SCORE_CARDS = [
 {id:1, yellow:2,red:2,green:0,brown:0,score:6},
