@@ -6,11 +6,11 @@ var io = require('socket.io')(server);
 var _ = require('lodash');
 
 // set the port of our application
-// process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 4000;
+// process.env.PORT_EXPRESS lets the port be set by Heroku
+var port = process.env.PORT_EXPRESS || 4000;
 
 server.listen(port, function() {
-  console.log('app is running on port ' + port)
+  console.log('express is running on port ' + port)
 });
 
 var SCORE_CARDS = [
