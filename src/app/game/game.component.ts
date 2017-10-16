@@ -10,7 +10,7 @@ import _ from "lodash";
 })
 export class GameComponent implements OnInit {
 
-  socket = io(location.origin.replace(/^http/, 'ws'));
+  socket = io(location.origin);
   user: any;
   joined: boolean = false;
   waiting: boolean = true;
