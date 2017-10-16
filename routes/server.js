@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 // set the port of our application
 // process.env.PORT_EXPRESS lets the port be set by Heroku
-var port = process.env.PORT_EXPRESS || 4000;
+var port = process.env.PORT || 4000;
 
 server.listen(port, function() {
   console.log('socket io is running on port ' + port)
