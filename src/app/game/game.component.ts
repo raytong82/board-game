@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import * as io from "socket.io-client";
 import _ from "lodash";
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-game',
@@ -10,7 +11,7 @@ import _ from "lodash";
 })
 export class GameComponent implements OnInit {
 
-  socket = io('http://ray-board-game-server.herokuapp.com');
+  socket = io(environment.serverUrl);
   user: any;
   joined: boolean = false;
   waiting: boolean = true;
@@ -73,9 +74,6 @@ export class GameComponent implements OnInit {
 
   resetGame() {
     console.log('reset-game');
-    if (this.user != this.game.playerTurn) {
-      return;
-    }
     if (!_.includes(_.map(this.game.players, 'user'), this.user)) {
       console.log('only players in game can reset game');
       return;
