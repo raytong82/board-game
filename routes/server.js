@@ -10,7 +10,7 @@ var _ = require('lodash');
 var port = process.env.PORT_EXPRESS || 4000;
 
 server.listen(port, function() {
-  console.log('express is running on port ' + port)
+  console.log('socket io is running on port ' + port)
 });
 
 var SCORE_CARDS = [
