@@ -5,14 +5,14 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var _ = require('lodash');
 
-if (!process.env.SERVER) {
-  console.log('not a server');
-  return;
-}
-
 // set the port of our application
 // process.env.PORT_EXPRESS lets the port be set by Heroku
 var port = process.env.PORT || 4000;
+
+if (!process.env.SERVER) {
+  console.log('not a server, assign different port:' + 4000);
+  port = 4000;
+}
 
 server.listen(port, function() {
   console.log('socket io is running on port ' + port)
@@ -400,21 +400,6 @@ io.on('connection', function (socket) {
 
 router.get('/', function(req, res, next) {
   res.send('Express REST API');
-});
-
-router.post('/join', function(req, res, next) {
-  console.log(req);
-  res.json('{}');
-});
-
-router.post('/score-card', function(req, res, next) {
-  console.log(req);
-  res.json('{}');
-});
-
-router.post('/trade-card', function(req, res, next) {
-  console.log(req);
-  res.json('{}');
 });
 
 module.exports = router;
