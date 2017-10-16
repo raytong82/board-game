@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "cross-var node ${HEROKU_APP_START}",
+    "start": "cross-var node ${x}",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
