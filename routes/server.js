@@ -125,6 +125,7 @@ var START_TRADE_CARDS = [
 
 var game = {
   players: [],
+  histories: [],
 };
 
 function initGame() {
@@ -134,6 +135,8 @@ function initGame() {
   var silverCoins = 4;
   var players = _.shuffle(game.players);
   var playerTurn = players[0].user;
+  var hideScoreCards = false;
+  var hideTradeCards = false;
   for (var i=0; i<players.length; i++) {
     var player = players[i];
     if (player.user == playerTurn) {
@@ -149,6 +152,8 @@ function initGame() {
       return tradeCard;
     });
     player.usedTradeCards = [];
+    hideScoreCards = hideScoreCards || player.hideScoreCards;
+    hideTradeCards = hideTradeCards || player.hideTradeCards;
   }
 
   game = {
@@ -160,6 +165,9 @@ function initGame() {
    silverCoins: 4,
    players: players,
    playerTurn: playerTurn,
+   histories: game.histories,
+   hideScoreCards: hideScoreCards,
+   hideTradeCards: hideTradeCards,
  };
 }
 
@@ -226,6 +234,7 @@ io.on('connection', function (socket) {
     console.log('join-game:' + JSON.stringify(data));
     if (!_.includes(_.map(game.players, 'user'), data.user)) {
       game.players.push(data);
+      game.histories.push({player: data.user, action: 'join game'});
       io.emit('join-game', game);
     }
     if (game.players.length == 2) {
@@ -236,6 +245,7 @@ io.on('connection', function (socket) {
 
   socket.on('rejoin-game', function (data) {
     console.log('rejoin-game:' + data);
+    game.histories.push({player: data.user, action: 'rejoin game'});
     io.emit('join-game', game);
     if (game.players.length == 2) {
       io.emit('update-game', game);
@@ -246,6 +256,7 @@ io.on('connection', function (socket) {
     console.log('view-game:' + data);
     if (game.players.length == 2 && !_.includes(_.map(game.players, 'user'), data.user)) {
       console.log('game is playing, view mode');
+      game.histories.push({player: data.user, action: 'view game'});
       io.emit('view-game', game);
     }
   });
@@ -253,7 +264,7 @@ io.on('connection', function (socket) {
   socket.on('reset-game', function (data) {
     console.log('reset-game:' + JSON.stringify(data));
 //    players = [];
-    game = {players: []};
+    game = {players: [], histories: []};
     io.emit('reset-game', game);
   });
 
@@ -284,6 +295,7 @@ io.on('connection', function (socket) {
     var turn = nextPlayerTurn(game.players, data.user);
     game.playerTurn = turn;
 
+    game.histories.push({player: data.user, action: 'use trade card'});
     io.emit('update-game', game);
   });
 
@@ -299,6 +311,7 @@ io.on('connection', function (socket) {
     var turn = nextPlayerTurn(game.players, data.user);
     game.playerTurn = turn;
 
+    game.histories.push({player: data.user, action: 'clear trade card'});
     io.emit('update-game', game);
   });
 
@@ -357,6 +370,7 @@ io.on('connection', function (socket) {
     var turn = nextPlayerTurn(game.players, data.user);
     game.playerTurn = turn;
 
+    game.histories.push({player: data.user, action: 'pick trade card'});
     io.emit('update-game', game);
   });
 
@@ -401,6 +415,7 @@ io.on('connection', function (socket) {
     var turn = nextPlayerTurn(game.players, data.user);
     game.playerTurn = turn;
 
+    game.histories.push({player: data.user, action: 'pick score card'});
     io.emit('update-game', game);
   });
 });

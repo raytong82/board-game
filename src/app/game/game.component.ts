@@ -16,6 +16,8 @@ export class GameComponent implements OnInit {
   joined: boolean = false;
   waiting: boolean = true;
   game: any = {scoreCards:[], tradeCards:[], publicScoreCards:[], publicTradeCards:[]};
+  hideScoreCards: boolean = false;
+  hideTradeCards: boolean = false;
   message: string = '';
   upCount: number = 0; // free upgrade
   maxTo: number = 0; // set to transform
@@ -46,7 +48,7 @@ export class GameComponent implements OnInit {
     }.bind(this));
 
     if (this.user !== null) {
-      this.socket.emit('rejoin-game', {});
+      this.socket.emit('rejoin-game', {user: this.user});
     }
 
     this.socket.on('reset-game', function (data) {
@@ -69,7 +71,7 @@ export class GameComponent implements OnInit {
 
   joinGame() {
     localStorage.setItem("user", this.user);
-    this.socket.emit('join-game', {user: this.user});
+    this.socket.emit('join-game', {user: this.user, hideScoreCards: this.hideScoreCards, hideTradeCards: this.hideTradeCards});
   }
 
   resetGame() {

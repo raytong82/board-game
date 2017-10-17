@@ -6,6 +6,23 @@
   padding: 5px 5px 5px 5px;
 }
 
+.panel-game {
+  display: inline-block
+}
+
+.panel-histories {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.histories {
+  margin-bottom: 0px;
+}
+
+.history-current-player {
+  color: #FF5722;
+}
+
 .btn {
   padding: 2px 8px;
 }
@@ -209,6 +226,15 @@
 
 .player-score-card {
   background-color: #337AB7;
+}
+
+.score-card-invisible {
+  padding: 5px;
+  text-align: center;
+}
+
+.player-trade-cards {
+  display: block;
 }
 
 .player-used-trade-cards {
