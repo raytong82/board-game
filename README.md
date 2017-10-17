@@ -44,5 +44,5 @@ SERVER: false
 
 - [x] hide score, score cards, trade cards (except last used) by player
 - [x] display game action history
-- determine end game and freeze actions
-- non-terminated action can followed by another action, should revert game data first
+- [ ] determine end game and freeze actions
+- [ ] non-terminated action can followed by another action, should revert game data first
