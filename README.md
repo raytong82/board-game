@@ -19,7 +19,8 @@ Be aware not to include trailing space at the end of value
  
 ## Environment
 
-environment=local # serverUrl would be localhost
+environment=local
+> serverUrl would be localhost
 
 ## Heroku Client App for Angular
 
