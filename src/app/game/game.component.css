@@ -13,6 +13,7 @@
 .panel-histories {
   display: inline-block;
   vertical-align: top;
+  float: right;
 }
 
 .histories {

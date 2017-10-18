@@ -45,5 +45,7 @@ SERVER: false
 
 - [x] hide score, score cards, trade cards (except last used) by player
 - [x] display game action history
-- [ ] determine end game and freeze actions
+- [x] determine end game and freeze actions and display winner
+- [x] fix use trade card became pick trade card
+- [x] fix waiting cannot reset
 - [ ] non-terminated action can followed by another action, should revert game data first

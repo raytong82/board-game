@@ -168,6 +168,7 @@ function initGame() {
    histories: game.histories,
    hideScoreCards: hideScoreCards,
    hideTradeCards: hideTradeCards,
+   hasEnd: false,
  };
 }
 
@@ -244,7 +245,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('rejoin-game', function (data) {
-    console.log('rejoin-game:' + data);
+    console.log('rejoin-game:' + JSON.stringify(data));
     game.histories.push({player: data.user, action: 'rejoin game'});
     io.emit('join-game', game);
     if (game.players.length == 2) {
@@ -253,7 +254,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('view-game', function (data) {
-    console.log('view-game:' + data);
+    console.log('view-game:' + JSON.stringify(data));
     if (game.players.length == 2 && !_.includes(_.map(game.players, 'user'), data.user)) {
       console.log('game is playing, view mode');
       game.histories.push({player: data.user, action: 'view game'});

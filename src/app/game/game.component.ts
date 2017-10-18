@@ -45,6 +45,7 @@ export class GameComponent implements OnInit {
     this.socket.on('update-game', function (data) {
       console.log('update-game:' + JSON.stringify(data));
       this.game = data;
+      this.checkEndGame();
     }.bind(this));
 
     if (this.user !== null) {
@@ -76,11 +77,12 @@ export class GameComponent implements OnInit {
 
   resetGame() {
     console.log('reset-game');
-    if (!_.includes(_.map(this.game.players, 'user'), this.user)) {
+    if (_.includes(_.map(this.game.players, 'user'), this.user) || this.game.hasEnd || this.waiting) {
+      this.socket.emit('reset-game', {});
+    } else {
       console.log('only players in game can reset game');
       return;
     }
-    this.socket.emit('reset-game', {});
   }
 
   pickScoreCard(data) {
@@ -140,6 +142,7 @@ export class GameComponent implements OnInit {
       return;
     }
 
+    this.pendingPickTradeCard = null;
     this.socket.emit('pick-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
   }
 
@@ -268,7 +271,7 @@ export class GameComponent implements OnInit {
     sumOfSpice -= 1;
 
     if (sumOfSpice <= 10) {
-      if (this.pendingPickTradeCard) {
+      if (this.pendingPickTradeCard != null) {
         this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
         this.handicapSpices = [];
         this.pendingPickTradeCard = null;
@@ -369,6 +372,9 @@ export class GameComponent implements OnInit {
     for (var i=0; i<player.scoreCards.length; i++) {
       total += player.scoreCards[i].score;
     }
+    total += player.spice.red;
+    total += player.spice.green;
+    total += player.spice.brown;
     return total;
   }
 
@@ -392,6 +398,26 @@ export class GameComponent implements OnInit {
       return 'free';
     } else {
       return 'from-to';
+    }
+  }
+
+  private checkEndGame() {
+    var hasEndGame = _.some(this.game.players, function (player) {
+      return player.scoreCards.length >= 6;
+    });
+    if (hasEndGame && this.game.playerTurn == this.game.players[0].user) {
+      var maxScore = 0;
+      var maxScorePlayer = null;
+      for (var i=0; i<this.game.players.length; i++) {
+        var totalScore = this.calTotalScore(this.game.players[i]);
+        if (totalScore > maxScore) {
+          maxScore = totalScore;
+          maxScorePlayer = this.game.players[i].user;
+        }
+      }
+      this.game.hasEnd = true;
+      this.game.playerTurn = null;
+      this.game.winner = maxScorePlayer;
     }
   }
 
