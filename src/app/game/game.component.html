@@ -188,7 +188,7 @@
               </div>
               <div class="player-score-cards">
                 <div class="score-card player-score-card" *ngFor="let scoreCard of player.scoreCards">
-                  <div class="spice" *ngIf="player.user == user || !game.hideScoreCards">
+                  <div class="spice" *ngIf="player.user == user || !game.hideScoreCards || game.hasEnd">
                     <div class="score-spice spice-yellow" *ngFor="let yellow of (scoreCard.yellow | num2Array)">
                       <i class="fa fa-cube" aria-hidden="true"></i>
                     </div>
