@@ -274,11 +274,11 @@ export class GameComponent implements OnInit {
       if (this.pendingPickTradeCard != null) {
         this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
         this.handicapSpices = [];
-        this.pendingPickTradeCard = null;
       } else {
         this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-        this.pendingUseTradeCard = null;
       }
+      this.pendingPickTradeCard = null;
+      this.pendingUseTradeCard = null;
     }
   }
 
@@ -323,6 +323,7 @@ export class GameComponent implements OnInit {
       this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
       this.handicapSpices = [];
       this.pendingUseTradeCard = null;
+      this.pendingPickTradeCard = null;
     }
   }
 
