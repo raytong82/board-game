@@ -4,8 +4,9 @@ Heroku does not support specify port, so client and server need to deploy to dif
 
 ## Port
 
-port 3000 for angularJS
-port 4000 for socket io
+~~port 3000 for angularJS~~
+~~port 4000 for socket io~~
+port 3000 for both angularJS and socket io
 
 ## Environment Variable
 
@@ -15,7 +16,8 @@ Be aware not to include trailing space at the end of value
 > app to run; client would be ./bin/www; server would be ./routes/server.js
 
 `SERVER=true`
-> override the port to 4000 instead of process.env.PORT
+> ~~override the port to 4000 instead of process.env.PORT~~
+
  
 ## Environment
 
@@ -48,4 +50,5 @@ SERVER: false
 - [x] determine end game and freeze actions and display winner
 - [x] fix use trade card became pick trade card
 - [x] fix waiting cannot reset
+- [x] web and server use the same port
 - [ ] non-terminated action can followed by another action, should revert game data first
