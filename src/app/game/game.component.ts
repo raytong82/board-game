@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class GameComponent implements OnInit {
 
-  socket = io(location.origin.startsWith('https') ? environment.serverUrl.replace(/^http/, 'https') : environment.serverUrl);
+  socket = io(location.origin.startsWith('https') ? environment.serverUrl.replace(/^http:/, 'https') : environment.serverUrl);
   user: any;
   joined: boolean = false;
   waiting: boolean = true;

@@ -1,22 +1,23 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
+//var app = express();
+var app = require('../app');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var _ = require('lodash');
 
 // set the port of our application
 // process.env.PORT_EXPRESS lets the port be set by Heroku
-var port = process.env.PORT || 4000;
+//var port = process.env.PORT || 4000;
 
-if (!process.env.SERVER) {
-  console.log('not a server, assign different port:' + 4000);
-  port = 4000;
-}
+//if (!process.env.SERVER) {
+//  console.log('not a server, assign different port:' + 4000);
+//  port = 4000;
+//}
 
-server.listen(port, function() {
-  console.log('socket io is running on port ' + port)
-});
+//server.listen(port, function() {
+//  console.log('socket io is running on port ' + port)
+//});
 
 var SCORE_CARDS = [
 {id:1, yellow:2,red:2,green:0,brown:0,score:6},
@@ -426,4 +427,6 @@ router.get('/', function(req, res, next) {
   res.send('Express REST API');
 });
 
-module.exports = router;
+app.use('/server', router);
+
+module.exports = server;

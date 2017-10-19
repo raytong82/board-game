@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://ray-board-game-server.herokuapp.com'
+  serverUrl: location.origin,
 };

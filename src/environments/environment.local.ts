@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'http://14.136.11.82:4000'
+  serverUrl: location.origin,
 };
