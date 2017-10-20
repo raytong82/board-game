@@ -56,7 +56,6 @@ export class GameComponent implements OnInit {
       console.log('reset-game:' + JSON.stringify(data));
       this.joined = false;
       this.waiting = true;
-      this.user = null;
       location.reload();
     }.bind(this));
 

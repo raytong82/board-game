@@ -83,8 +83,9 @@
   display: inline-block;
   border-style: groove;
   border-width: 3px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+  line-height: 16px;
 }
 
 .spice-yellow {
@@ -136,6 +137,7 @@
   border-width: 3px;
   margin-left: 5px;
   margin-right: 5px;
+  line-height: 16px;
 }
 
 .trade-bonus {
@@ -214,6 +216,7 @@
   border-width: 3px;
   margin-left: 5px;
   margin-right: 5px;
+  line-height: 16px;
 }
 
 .player-coins {

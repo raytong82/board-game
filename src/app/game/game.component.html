@@ -143,8 +143,8 @@
                 <button type="button" class="btn btn-default player-message player-to-set" *ngFor="let set of (maxTo | num2Array)" (click)="toSpice(set+1)">{{ set + 1 }}</button>
                 <p class="player-message player-discard-spice" *ngIf="moreThan10Spice(player.spice)"> DISCARD down to 10 spices</p>
                 <p class="player-message player-handicap" *ngIf="requiredHandicap > 0"> DISCARD {{ requiredHandicap }} spices to pick your trade card</p>
-                <p class="player-message player-winner" *ngIf="game.winner == user"> is WINNER !! <i class="fa fa-gift" aria-hidden="true"></i></p>
               </div>
+              <p class="player-message player-winner" *ngIf="game.winner == player.user"> is WINNER !! <i class="fa fa-gift" aria-hidden="true"></i></p>
             </div>
             <div class="player-data">
               <div class="player-spices">
@@ -344,7 +344,7 @@
       </ng-template>
     </div>
     <div class="panel-histories" *ngIf="joined && !waiting">
-      <ul class="histories" *ngFor="let history of game.histories">
+      <ul class="histories" *ngFor="let history of game.histories | slice:-20">
         <li [ngClass]="{'history-current-player': history.player == user}">{{ history.player }} : {{ history.action }}</li>
       </ul>
     </div>
