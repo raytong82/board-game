@@ -51,4 +51,6 @@ SERVER: false
 - [x] fix use trade card became pick trade card
 - [x] fix waiting cannot reset
 - [x] web and server use the same port
+- [x] fix display winner, optimize ui reduce space, display only last 20 actions
+- [ ] support chat room with emoji
 - [ ] non-terminated action can followed by another action, should revert game data first
