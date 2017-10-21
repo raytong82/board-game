@@ -420,6 +420,11 @@ io.on('connection', function (socket) {
     game.histories.push({player: data.user, action: 'pick score card'});
     io.emit('update-game', game);
   });
+
+  socket.on('send-chat', function (data) {
+    game.histories.push(data);
+    io.emit('send-chat', {histories: game.histories});
+  });
 });
 
 

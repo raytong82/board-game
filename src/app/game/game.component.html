@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="panel panel-primary panel-game" *ngIf="joined; else joingame">
+    <div class="col-5 panel panel-primary panel-game" *ngIf="joined; else joingame">
       <div class="panel-heading" *ngIf="waiting; else playing">
         <button type="button" class="btn btn-default game-reset" (click)="resetGame()">RESET</button>
         <h1>Waiting other players !!</h1>
@@ -343,10 +343,61 @@
         </div>
       </ng-template>
     </div>
-    <div class="panel-histories" *ngIf="joined && !waiting">
-      <ul class="histories" *ngFor="let history of game.histories | slice:-20">
-        <li [ngClass]="{'history-current-player': history.player == user}">{{ history.player }} : {{ history.action }}</li>
-      </ul>
+    <div class="col-1 panel panel-primary panel-histories" *ngIf="joined && !waiting">
+      <div class="panel-heading">
+        Histories
+      </div>
+      <div class="panel-body">
+        <div>
+          <ul class="histories" *ngFor="let history of game.histories">
+            <li [ngClass]="{'history-current-player': history.player == user}" *ngIf="history.action">{{ history.player }} : {{ history.action }}</li>
+            <li [ngClass]="{'history-current-player': history.player == user}" *ngIf="history.chat">{{ history.player }} : {{ history.chat }}</li>
+            <li [ngClass]="{'history-current-player': history.player == user}" *ngIf="history.emoji">{{ history.player }} : <i [ngClass]="'em ' + history.emoji"></i></li>
+          </ul>
+        </div>
+        <div>
+          <form (ngSubmit)="sendChat()" #joinForm="ngForm">
+            <div class="emoji-container panel panel-primary">
+              <i (click)="sendEmoji('em---1')" class="em em---1"></i>
+              <i (click)="sendEmoji('em--1')" class="em em--1"></i>
+              <i (click)="sendEmoji('em-100')" class="em em-100"></i>
+              <i (click)="sendEmoji('em-alien')" class="em em-alien"></i>
+              <i (click)="sendEmoji('em-anger')" class="em em-anger"></i>
+              <i (click)="sendEmoji('em-angry')" class="em em-angry"></i>
+              <i (click)="sendEmoji('em-astonished')" class="em em-astonished"></i>
+              <i (click)="sendEmoji('em-blush')" class="em em-blush"></i>
+              <br>
+              <i (click)="sendEmoji('em-bow')" class="em em-bow"></i>
+              <i (click)="sendEmoji('em-broken_heart')" class="em em-broken_heart"></i>
+              <i (click)="sendEmoji('em-bulb')" class="em em-bulb"></i>
+              <i (click)="sendEmoji('em-clap')" class="em em-clap"></i>
+              <i (click)="sendEmoji('em-cold_sweat')" class="em em-cold_sweat"></i>
+              <i (click)="sendEmoji('em-confounded')" class="em em-confounded"></i>
+              <i (click)="sendEmoji('em-cry')" class="em em-cry"></i>
+              <i (click)="sendEmoji('em-dizzy_face')" class="em em-dizzy_face"></i>
+              <br>
+              <i (click)="sendEmoji('em-facepunch')" class="em em-facepunch"></i>
+              <i (click)="sendEmoji('em-eyes')" class="em em-eyes"></i>
+              <i (click)="sendEmoji('em-ghost')" class="em em-ghost"></i>
+              <i (click)="sendEmoji('em-grin')" class="em em-grin"></i>
+              <i (click)="sendEmoji('em-heart_eyes')" class="em em-heart_eyes"></i>
+              <i (click)="sendEmoji('em-innocent')" class="em em-innocent"></i>
+              <i (click)="sendEmoji('em-joy')" class="em em-joy"></i>
+              <i (click)="sendEmoji('em-kiss')" class="em em-kiss"></i>
+              <br>
+              <i (click)="sendEmoji('em-kissing_heart')" class="em em-kissing_heart"></i>
+              <i (click)="sendEmoji('em-laughing')" class="em em-laughing"></i>
+              <i (click)="sendEmoji('em-sleepy')" class="em em-sleepy"></i>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="chatMessage" name="chatMessage" placeholder="input message here" required="" />
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-success">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <ng-template #joingame>
       <div class="panel panel-primary">

@@ -25,6 +25,7 @@ export class GameComponent implements OnInit {
   requiredHandicap = 0;
   pendingUseTradeCard: any;
   pendingPickTradeCard: any;
+  chatMessage: any;
 
   constructor(private gameService: GameService) { }
 
@@ -64,6 +65,11 @@ export class GameComponent implements OnInit {
       this.joined = true;
       this.waiting = false;
       this.game = data;
+    }.bind(this));
+
+    this.socket.on('send-chat', function (data) {
+      console.log('send-chat:' + JSON.stringify(data));
+      this.game.histories = data.histories;
     }.bind(this));
 
     this.socket.emit('view-game', {user: this.user});
@@ -223,6 +229,17 @@ export class GameComponent implements OnInit {
     this.upCount = 0;
     this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
     this.pendingUseTradeCard = null;
+  }
+
+  sendEmoji(code) {
+    console.log('sendEmoji:');
+    this.socket.emit('send-chat', {player: this.user, emoji: code});
+  }
+
+  sendChat() {
+    console.log('sendChat:');
+    this.socket.emit('send-chat', {player: this.user, chat: this.chatMessage});
+    this.chatMessage = null;
   }
 
   private upSpice(data, player) {
