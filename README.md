@@ -52,5 +52,7 @@ SERVER: false
 - [x] fix waiting cannot reset
 - [x] web and server use the same port
 - [x] fix display winner, optimize ui reduce space, display only last 20 actions
-- [ ] support chat room with emoji
-- [ ] non-terminated action can followed by another action, should revert game data first
+- [x] support chat room with emoji
+- [x] check on intermediate action and clear data after action completed
+- [ ] store data in mlab for game history
+- [ ] data analytics on stored data

@@ -100,12 +100,18 @@ export class GameComponent implements OnInit {
       return player.user == that.game.playerTurn;
     });
 
+    if (this.pendingUseTradeCard != null || this.pendingPickTradeCard != null) {
+      console.log('pendingUseTradeCard=' + this.pendingUseTradeCard + ', pendingPickTradeCard=' + this.pendingPickTradeCard);
+      return;
+    }
+
     if (data.yellow > player.spice.yellow || data.red > player.spice.red
     || data.green > player.spice.green || data.brown > player.spice.brown) {
       return;
     }
 
     this.socket.emit('pick-score-card', {user: this.user, scoreCard: data});
+    this.clearActionData();
   }
 
   pickTradeCard(data) {
@@ -117,6 +123,11 @@ export class GameComponent implements OnInit {
     var player = _.find(this.game.players, function(player) {
       return player.user == that.game.playerTurn;
     });
+
+    if (this.pendingUseTradeCard != null || this.pendingPickTradeCard != null) {
+      console.log('pendingUseTradeCard=' + this.pendingUseTradeCard + ', pendingPickTradeCard=' + this.pendingPickTradeCard);
+      return;
+    }
 
     var tradeCardIndex = _.findIndex(this.game.tradeCards, function(tradeCard) {
       return tradeCard.id == data.id;
@@ -147,8 +158,8 @@ export class GameComponent implements OnInit {
       return;
     }
 
-    this.pendingPickTradeCard = null;
     this.socket.emit('pick-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
+    this.clearActionData();
   }
 
   useTradeCard(data) {
@@ -160,7 +171,9 @@ export class GameComponent implements OnInit {
     var player = _.find(this.game.players, function(player) {
       return player.user == that.user;
     });
-    if (this.pendingUseTradeCard != null) {
+
+    if (this.pendingUseTradeCard != null || this.pendingPickTradeCard != null) {
+      console.log('pendingUseTradeCard=' + this.pendingUseTradeCard + ', pendingPickTradeCard=' + this.pendingPickTradeCard);
       return;
     }
 
@@ -193,7 +206,7 @@ export class GameComponent implements OnInit {
       return;
     }
     this.socket.emit('use-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
-    this.pendingUseTradeCard = null;
+    this.clearActionData();
   }
 
   clickSpice(data) {
@@ -228,7 +241,7 @@ export class GameComponent implements OnInit {
 
     this.upCount = 0;
     this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-    this.pendingUseTradeCard = null;
+    this.clearActionData();
   }
 
   sendEmoji(code) {
@@ -240,6 +253,16 @@ export class GameComponent implements OnInit {
     console.log('sendChat:');
     this.socket.emit('send-chat', {player: this.user, chat: this.chatMessage});
     this.chatMessage = null;
+  }
+
+  private clearActionData() {
+      this.message = '';
+      this.upCount = 0;
+      this.maxTo = 0;
+      this.handicapSpices = [];
+      this.requiredHandicap = 0;
+      this.pendingUseTradeCard = null;
+      this.pendingPickTradeCard = null;
   }
 
   private upSpice(data, player) {
@@ -264,7 +287,7 @@ export class GameComponent implements OnInit {
 
     if (this.upCount <= 0) {
       this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-      this.pendingUseTradeCard = null;
+      this.clearActionData();
     }
   }
 
@@ -293,8 +316,7 @@ export class GameComponent implements OnInit {
       } else {
         this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
       }
-      this.pendingPickTradeCard = null;
-      this.pendingUseTradeCard = null;
+      this.clearActionData();
     }
   }
 
@@ -337,9 +359,7 @@ export class GameComponent implements OnInit {
       }
 
       this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
-      this.handicapSpices = [];
-      this.pendingUseTradeCard = null;
-      this.pendingPickTradeCard = null;
+      this.clearActionData();
     }
   }
 
@@ -372,7 +392,7 @@ export class GameComponent implements OnInit {
     }
 
     this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-    this.pendingUseTradeCard = null;
+    this.clearActionData();
   }
 
   clearTradeCards() {
@@ -380,6 +400,7 @@ export class GameComponent implements OnInit {
       return;
     }
     this.socket.emit('clear-trade-cards', {user: this.user});
+    this.clearActionData();
   }
 
   calTotalScore(player) {
