@@ -54,5 +54,6 @@ SERVER: false
 - [x] fix display winner, optimize ui reduce space, display only last 20 actions
 - [x] support chat room with emoji
 - [x] check on intermediate action and clear data after action completed
-- [ ] store data in mlab for game history
+- [x] store data in mlab for game history
 - [ ] data analytics on stored data
+- [ ] support inline emoji

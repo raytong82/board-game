@@ -6,6 +6,56 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var _ = require('lodash');
 
+
+
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://ray:ray@ds023613.mlab.com:23613/ray-board-game')
+  .then(() =>  console.log('connection successful'))
+  .catch((err) => console.error(err));
+var GameSchema = new mongoose.Schema({
+  game: String,
+  epoch: Number,
+  player: String,
+  action: String,
+  useTradeCard: {
+    from: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    to: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    free: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    up: Number
+  },
+  pickTradeCard: {
+    yellow: Number,
+    red: Number,
+    green: Number,
+    brown: Number
+  },
+  pickScoreCard: {
+    yellow: Number,
+    red: Number,
+    green: Number,
+    brown: Number
+  },
+  totalScore: Number
+});
+var Game = mongoose.model('Game', GameSchema);
+
+
 // set the port of our application
 // process.env.PORT_EXPRESS lets the port be set by Heroku
 //var port = process.env.PORT || 4000;
@@ -158,19 +208,20 @@ function initGame() {
   }
 
   game = {
-   scoreCards: _.take(scoreCards, 5),
-   tradeCards: _.take(tradeCards, 6),
-   publicScoreCards: _.drop(scoreCards, 5),
-   publicTradeCards: _.drop(tradeCards, 6),
-   goldCoins: 4,
-   silverCoins: 4,
-   players: players,
-   playerTurn: playerTurn,
-   histories: game.histories,
-   hideScoreCards: hideScoreCards,
-   hideTradeCards: hideTradeCards,
-   hasEnd: false,
- };
+    id: Math.round(new Date().getTime() / 1000),
+    scoreCards: _.take(scoreCards, 5),
+    tradeCards: _.take(tradeCards, 6),
+    publicScoreCards: _.drop(scoreCards, 5),
+    publicTradeCards: _.drop(tradeCards, 6),
+    goldCoins: 4,
+    silverCoins: 4,
+    players: players,
+    playerTurn: playerTurn,
+    histories: game.histories,
+    hideScoreCards: hideScoreCards,
+    hideTradeCards: hideTradeCards,
+    hasEnd: false,
+  };
 }
 
 /*var game = {
@@ -225,6 +276,19 @@ function nextPlayerTurn(players, currentPlayer) {
   return players[playerIndex].user;
 }
 
+function calTotalScore(player) {
+  var total = 0;
+  total += player.goldCoins * 3;
+  total += player.silverCoins;
+  for (var i=0; i<player.scoreCards.length; i++) {
+    total += player.scoreCards[i].score;
+  }
+  total += player.spice.red;
+  total += player.spice.green;
+  total += player.spice.brown;
+  return total;
+}
+
 // socket io
 io.on('connection', function (socket) {
   console.log('User connected');
@@ -270,6 +334,37 @@ io.on('connection', function (socket) {
     io.emit('reset-game', game);
   });
 
+  socket.on('clear-trade-cards', function (data) {
+    console.log('clear-trade-cards:' + JSON.stringify(data));
+    var player = _.find(game.players, function (p) {
+      return p.user == data.user;
+    });
+
+    player.tradeCards = player.tradeCards.concat(player.usedTradeCards);
+    player.usedTradeCards = [];
+
+    var turn = nextPlayerTurn(game.players, data.user);
+    game.playerTurn = turn;
+
+    game.histories.push({player: data.user, action: 'clear trade card'});
+    io.emit('update-game', game);
+
+    // save to mongo
+    Game.create({
+      game: game.id,
+      epoch: Math.round(new Date().getTime() / 1000),
+      player: player.user,
+      action: 'clear-trade-cards',
+      totalScore: calTotalScore(player)
+    }, function (err, res) {
+      if (err) {
+        console.log('ERR: ' + err);
+      } else {
+        console.log('OK: ' + res);
+      }
+    });
+  });
+
   socket.on('use-trade-card', function (data) {
     console.log('use-trade-card:' + JSON.stringify(data));
     var player = _.find(game.players, function (p) {
@@ -278,10 +373,6 @@ io.on('connection', function (socket) {
 
     var type = tradeCardType(data.tradeCard);
     if (type == 'free') {
-//      player.spice.yellow += data.tradeCard.free.yellow;
-//      player.spice.red += data.tradeCard.free.red;
-//      player.spice.green += data.tradeCard.free.green;
-//      player.spice.brown += data.tradeCard.free.brown;
       player.spice = data.spice;
     } else if (type == 'up') {
       player.spice = data.spice;
@@ -299,22 +390,22 @@ io.on('connection', function (socket) {
 
     game.histories.push({player: data.user, action: 'use trade card'});
     io.emit('update-game', game);
-  });
 
-  socket.on('clear-trade-cards', function (data) {
-    console.log('clear-trade-cards:' + JSON.stringify(data));
-    var player = _.find(game.players, function (p) {
-      return p.user == data.user;
+    // save to mongo
+    Game.create({
+      game: game.id,
+      epoch: Math.round(new Date().getTime() / 1000),
+      player: player.user,
+      action: 'use-trade-card',
+      totalScore: calTotalScore(player),
+      useTradeCard: data.tradeCard
+    }, function (err, res) {
+      if (err) {
+        console.log('ERR: ' + err);
+      } else {
+        console.log('OK: ' + res);
+      }
     });
-
-    player.tradeCards = player.tradeCards.concat(player.usedTradeCards);
-    player.usedTradeCards = [];
-
-    var turn = nextPlayerTurn(game.players, data.user);
-    game.playerTurn = turn;
-
-    game.histories.push({player: data.user, action: 'clear trade card'});
-    io.emit('update-game', game);
   });
 
   socket.on('pick-trade-card', function (data) {
@@ -374,6 +465,22 @@ io.on('connection', function (socket) {
 
     game.histories.push({player: data.user, action: 'pick trade card'});
     io.emit('update-game', game);
+
+    // save to mongo
+    Game.create({
+      game: game.id,
+      epoch: Math.round(new Date().getTime() / 1000),
+      player: player.user,
+      action: 'pick-trade-card',
+      totalScore: calTotalScore(player),
+      pickTradeCard: data.tradeCard
+    }, function (err, res) {
+      if (err) {
+        console.log('ERR: ' + err);
+      } else {
+        console.log('OK: ' + res);
+      }
+    });
   });
 
   socket.on('pick-score-card', function (data) {
@@ -419,6 +526,22 @@ io.on('connection', function (socket) {
 
     game.histories.push({player: data.user, action: 'pick score card'});
     io.emit('update-game', game);
+
+    // save to mongo
+    Game.create({
+      game: game.id,
+      epoch: Math.round(new Date().getTime() / 1000),
+      player: player.user,
+      action: 'pick-score-card',
+      totalScore: calTotalScore(player),
+      pickScoreCard: data.scoreCard
+    }, function (err, res) {
+      if (err) {
+        console.log('ERR: ' + err);
+      } else {
+        console.log('OK: ' + res);
+      }
+    });
   });
 
   socket.on('send-chat', function (data) {
