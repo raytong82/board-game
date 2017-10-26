@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 //var server = require('./routes/server');
 var app = express();
 
+//app.engine('html', require('consolidate').handlebars);
 app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(bodyParser.json());

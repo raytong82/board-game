@@ -39,6 +39,10 @@ HEROKU_APP_START: ./routes/server.js
 SERVER: false
 ```
 
+## How to build
+
+`npm install --save express body-parser morgan body-parser serve-favicon mongoose  socketio socket.io-client html`
+
 ## How to run
 
 `set HEROKU_APP_START=./bin/www&& set SERVER=true&& ng build --environment=local && npm start`

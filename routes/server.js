@@ -10,7 +10,7 @@ var _ = require('lodash');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://ray:ray@ds023613.mlab.com:23613/ray-board-game')
+mongoose.connect('mongodb://ray:ray@ds023613.mlab.com:23613/ray-board-game', {useMongoClient:true})
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
 var GameSchema = new mongoose.Schema({
@@ -51,6 +51,7 @@ var GameSchema = new mongoose.Schema({
     green: Number,
     brown: Number
   },
+  preTotalScore: Number,
   totalScore: Number
 });
 var Game = mongoose.model('Game', GameSchema);
@@ -371,6 +372,7 @@ io.on('connection', function (socket) {
       return p.user == data.user;
     });
 
+    var preTotalScore = calTotalScore(player);
     var type = tradeCardType(data.tradeCard);
     if (type == 'free') {
       player.spice = data.spice;
@@ -397,6 +399,7 @@ io.on('connection', function (socket) {
       epoch: Math.round(new Date().getTime() / 1000),
       player: player.user,
       action: 'use-trade-card',
+      preTotalScore: preTotalScore,
       totalScore: calTotalScore(player),
       useTradeCard: data.tradeCard
     }, function (err, res) {
@@ -548,11 +551,40 @@ io.on('connection', function (socket) {
     game.histories.push(data);
     io.emit('send-chat', {histories: game.histories});
   });
+
+  socket.on('get-all-players', function (query) {
+    Game.distinct('player', function (err, result) {
+      if (err) {
+        console.log('get-all-players error:' + err);
+      } else {
+        socket.emit('get-all-players', result);
+      }
+    });
+  });
+
+  socket.on('query-stat', function (query) {
+    Game.find(query, function (err, result) {
+      if (err) {
+        console.log('query-stat error:' + err);
+      } else {
+        socket.emit('query-stat', result);
+      }
+    });
+  });
+
 });
 
 
 router.get('/', function(req, res, next) {
   res.send('Express REST API');
+});
+
+router.get('/test', function(req, res, next) {
+  res.send('Express REST API');
+});
+
+router.post('/stat', function(req, res, next) {
+  res.json({a: 1, b: 2});
 });
 
 app.use('/server', router);

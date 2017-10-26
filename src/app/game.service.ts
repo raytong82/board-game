@@ -6,46 +6,14 @@ import 'rxjs/add/operator/map';
 export class GameService {
 
   constructor(private http: Http) { }
-  
-  joinGame(data) {
-    return new Promise((resolve, reject) => {
-      this.http.post('/server/join', data)
-        .map(res => res.json())
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    });
-  }
-  
-  pickScoreCard(data) {
-    return new Promise((resolve, reject) => {
-      this.http.post('/server/score-card', data)
-        .map(res => res.json())
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    });
-  }
 
-  pickTradeCard(data) {
-    return new Promise((resolve, reject) => {
-      this.http.post('/server/trade-card', data)
-        .map(res => res.json())
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
-    });
-  }
-  
-  useTradeCard(data) {
-  }
-  
-  clearTradeCard() {
+  search(query) {
+    this.http.post('/server/stat', query)
+      .map(res => res.json())
+      .subscribe(res => {
+        console.log('success:' + JSON.stringify(res));
+      }, err => {
+        console.log('error:' +JSON.stringify(err));
+      });
   }
 }

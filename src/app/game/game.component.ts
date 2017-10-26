@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import * as io from "socket.io-client";
-import _ from "lodash";
+import * as io from 'socket.io-client';
+import _ from 'lodash';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -30,7 +30,7 @@ export class GameComponent implements OnInit {
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
-    this.user = localStorage.getItem("user");
+    this.user = localStorage.getItem('user');
 
     this.socket.on('join-game', function (data) {
       console.log('join-game:' + JSON.stringify(data.players));
@@ -76,7 +76,7 @@ export class GameComponent implements OnInit {
   }
 
   joinGame() {
-    localStorage.setItem("user", this.user);
+    localStorage.setItem('user', this.user);
     this.socket.emit('join-game', {user: this.user, hideScoreCards: this.hideScoreCards, hideTradeCards: this.hideTradeCards});
   }
 
