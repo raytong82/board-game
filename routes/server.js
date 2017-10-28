@@ -19,6 +19,7 @@ var GameSchema = new mongoose.Schema({
   player: String,
   action: String,
   useTradeCard: {
+    id: Number,
     from: {
       yellow: Number,
       red: Number,
@@ -40,19 +41,38 @@ var GameSchema = new mongoose.Schema({
     up: Number
   },
   pickTradeCard: {
-    yellow: Number,
-    red: Number,
-    green: Number,
-    brown: Number
+    id: Number,
+    from: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    to: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    free: {
+      yellow: Number,
+      red: Number,
+      green: Number,
+      brown: Number
+    },
+    up: Number
   },
   pickScoreCard: {
+    id: Number,
     yellow: Number,
     red: Number,
     green: Number,
     brown: Number
   },
   preTotalScore: Number,
-  totalScore: Number
+  totalScore: Number,
+  preSpiceValue: Number,
+  spiceValue: Number
 });
 var Game = mongoose.model('Game', GameSchema);
 
@@ -71,42 +91,42 @@ var Game = mongoose.model('Game', GameSchema);
 //});
 
 var SCORE_CARDS = [
-{id:1, yellow:2,red:2,green:0,brown:0,score:6},
-{id:2, yellow:3,red:2,green:0,brown:0,score:7},
-{id:3, yellow:0,red:4,green:0,brown:0,score:8},
-{id:4, yellow:2,red:0,green:2,brown:0,score:8},
-{id:5, yellow:2,red:3,green:0,brown:0,score:8},
-{id:6, yellow:2,red:1,green:0,brown:1,score:9},
-{id:7, yellow:3,red:0,green:2,brown:0,score:9},
-{id:8, yellow:0,red:5,green:0,brown:0,score:10},
-{id:9, yellow:2,red:0,green:0,brown:2,score:10},
-{id:10, yellow:0,red:2,green:2,brown:0,score:10},
-{id:11, yellow:2,red:0,green:3,brown:0,score:11},
-{id:12, yellow:3,red:0,green:0,brown:2,score:11},
-{id:13, yellow:0,red:2,green:0,brown:2,score:12},
-{id:14, yellow:1,red:1,green:1,brown:1,score:12},
-{id:15, yellow:0,red:3,green:2,brown:0,score:12},
-{id:16, yellow:0,red:0,green:4,brown:0,score:12},
-{id:17, yellow:0,red:2,green:1,brown:1,score:12},
-{id:18, yellow:1,red:0,green:2,brown:1,score:12},
-{id:19, yellow:0,red:2,green:3,brown:0,score:13},
-{id:20, yellow:2,red:2,green:2,brown:0,score:13},
-{id:21, yellow:0,red:0,green:2,brown:2,score:14},
-{id:22, yellow:2,red:0,green:0,brown:3,score:14},
-{id:23, yellow:0,red:3,green:0,brown:2,score:14},
-{id:24, yellow:3,red:1,green:1,brown:1,score:14},
-{id:25, yellow:0,red:0,green:5,brown:0,score:15},
-{id:26, yellow:2,red:2,green:0,brown:2,score:15},
-{id:27, yellow:0,red:2,green:0,brown:3,score:16},
-{id:28, yellow:0,red:0,green:0,brown:4,score:16},
-{id:29, yellow:1,red:3,green:1,brown:1,score:16},
-{id:30, yellow:2,red:0,green:2,brown:2,score:17},
-{id:31, yellow:0,red:0,green:3,brown:2,score:17},
-{id:32, yellow:0,red:0,green:2,brown:3,score:18},
-{id:33, yellow:1,red:1,green:3,brown:1,score:18},
-{id:34, yellow:0,red:2,green:2,brown:2,score:19},
-{id:35, yellow:1,red:1,green:1,brown:3,score:20},
-{id:36, yellow:0,red:0,green:0,brown:5,score:20},
+{id:101, yellow:2,red:2,green:0,brown:0,score:6},
+{id:102, yellow:3,red:2,green:0,brown:0,score:7},
+{id:103, yellow:0,red:4,green:0,brown:0,score:8},
+{id:104, yellow:2,red:0,green:2,brown:0,score:8},
+{id:105, yellow:2,red:3,green:0,brown:0,score:8},
+{id:106, yellow:2,red:1,green:0,brown:1,score:9},
+{id:107, yellow:3,red:0,green:2,brown:0,score:9},
+{id:108, yellow:0,red:5,green:0,brown:0,score:10},
+{id:109, yellow:2,red:0,green:0,brown:2,score:10},
+{id:110, yellow:0,red:2,green:2,brown:0,score:10},
+{id:111, yellow:2,red:0,green:3,brown:0,score:11},
+{id:112, yellow:3,red:0,green:0,brown:2,score:11},
+{id:113, yellow:0,red:2,green:0,brown:2,score:12},
+{id:114, yellow:1,red:1,green:1,brown:1,score:12},
+{id:115, yellow:0,red:3,green:2,brown:0,score:12},
+{id:116, yellow:0,red:0,green:4,brown:0,score:12},
+{id:117, yellow:0,red:2,green:1,brown:1,score:12},
+{id:118, yellow:1,red:0,green:2,brown:1,score:12},
+{id:119, yellow:0,red:2,green:3,brown:0,score:13},
+{id:120, yellow:2,red:2,green:2,brown:0,score:13},
+{id:121, yellow:0,red:0,green:2,brown:2,score:14},
+{id:122, yellow:2,red:0,green:0,brown:3,score:14},
+{id:123, yellow:0,red:3,green:0,brown:2,score:14},
+{id:124, yellow:3,red:1,green:1,brown:1,score:14},
+{id:125, yellow:0,red:0,green:5,brown:0,score:15},
+{id:126, yellow:2,red:2,green:0,brown:2,score:15},
+{id:127, yellow:0,red:2,green:0,brown:3,score:16},
+{id:128, yellow:0,red:0,green:0,brown:4,score:16},
+{id:129, yellow:1,red:3,green:1,brown:1,score:16},
+{id:130, yellow:2,red:0,green:2,brown:2,score:17},
+{id:131, yellow:0,red:0,green:3,brown:2,score:17},
+{id:132, yellow:0,red:0,green:2,brown:3,score:18},
+{id:133, yellow:1,red:1,green:3,brown:1,score:18},
+{id:134, yellow:0,red:2,green:2,brown:2,score:19},
+{id:135, yellow:1,red:1,green:1,brown:3,score:20},
+{id:136, yellow:0,red:0,green:0,brown:5,score:20},
 ];
 
 var TRADE_CARDS = [
@@ -200,7 +220,7 @@ function initGame() {
     player.silverCoins = 0;
     player.scoreCards = [];
     player.tradeCards = _.map(_.cloneDeep(START_TRADE_CARDS), function(tradeCard) {
-      tradeCard.id += player.user;
+      tradeCard.id -= (i+1) * 10;
       return tradeCard;
     });
     player.usedTradeCards = [];
@@ -290,6 +310,15 @@ function calTotalScore(player) {
   return total;
 }
 
+function calSpiceValue(player) {
+  var total = 0;
+  total += player.spice.yellow;
+  total += player.spice.red * 2;
+  total += player.spice.green * 3;
+  total += player.spice.brown * 4;
+  return total;
+}
+
 // socket io
 io.on('connection', function (socket) {
   console.log('User connected');
@@ -372,6 +401,7 @@ io.on('connection', function (socket) {
       return p.user == data.user;
     });
 
+    var preSpiceValue = calSpiceValue(player);
     var preTotalScore = calTotalScore(player);
     var type = tradeCardType(data.tradeCard);
     if (type == 'free') {
@@ -401,6 +431,8 @@ io.on('connection', function (socket) {
       action: 'use-trade-card',
       preTotalScore: preTotalScore,
       totalScore: calTotalScore(player),
+      preSpiceValue: preSpiceValue,
+      spiceValue: calSpiceValue(player),
       useTradeCard: data.tradeCard
     }, function (err, res) {
       if (err) {
@@ -426,6 +458,8 @@ io.on('connection', function (socket) {
       game.publicTradeCards = _.drop(game.publicTradeCards, 1);
     }
 
+    var preSpiceValue = calSpiceValue(player);
+    var preTotalScore = calTotalScore(player);
     if (data.spice) {
       player.spice = data.spice;
     }
@@ -475,7 +509,10 @@ io.on('connection', function (socket) {
       epoch: Math.round(new Date().getTime() / 1000),
       player: player.user,
       action: 'pick-trade-card',
+      preTotalScore: preTotalScore,
       totalScore: calTotalScore(player),
+      preSpiceValue, preSpiceValue,
+      spiceValue: calSpiceValue(player),
       pickTradeCard: data.tradeCard
     }, function (err, res) {
       if (err) {
@@ -491,6 +528,9 @@ io.on('connection', function (socket) {
     var player = _.find(game.players, function (p) {
       return p.user == data.user;
     });
+
+    var preSpiceValue = calSpiceValue(player);
+    var preTotalScore = calTotalScore(player);
 
     player.spice.yellow -= data.scoreCard.yellow;
     player.spice.red -= data.scoreCard.red;
@@ -536,7 +576,10 @@ io.on('connection', function (socket) {
       epoch: Math.round(new Date().getTime() / 1000),
       player: player.user,
       action: 'pick-score-card',
+      preTotalScore: preTotalScore,
       totalScore: calTotalScore(player),
+      preSpiceValue: preSpiceValue,
+      spiceValue: calSpiceValue(player),
       pickScoreCard: data.scoreCard
     }, function (err, res) {
       if (err) {
