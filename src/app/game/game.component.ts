@@ -4,6 +4,11 @@ import * as io from 'socket.io-client';
 import _ from 'lodash';
 import { environment } from '../../environments/environment';
 
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { GameActionDialog } from './game.action.dialog';
+import { GameChatDialog } from './game.chat.dialog';
+import { GameConfirmDialog } from './game.confirm.dialog';
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -27,7 +32,8 @@ export class GameComponent implements OnInit {
   pendingPickTradeCard: any;
   chatMessage: any;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, public dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.user = localStorage.getItem('user');
@@ -46,6 +52,15 @@ export class GameComponent implements OnInit {
     this.socket.on('update-game', function (data) {
       console.log('update-game:' + JSON.stringify(data));
       this.game = data;
+
+      var lastHistory = _.last(this.game.histories);
+      if (lastHistory.player != this.user && this.joined) {
+        if (lastHistory.player != this.user && this.joined) {
+          if (lastHistory.action) {
+            this.openActionDialog(lastHistory);
+          }
+        }
+      }
       this.checkEndGame();
     }.bind(this));
 
@@ -70,6 +85,15 @@ export class GameComponent implements OnInit {
     this.socket.on('send-chat', function (data) {
       console.log('send-chat:' + JSON.stringify(data));
       this.game.histories = data.histories;
+
+      var lastHistory = _.last(this.game.histories);
+      if (lastHistory.player != this.user && this.joined) {
+        if (lastHistory.action) {
+          this.openActionDialog(lastHistory);
+        } else if (lastHistory.chat || lastHistory.emoji) {
+          this.openChatDialog(lastHistory);
+        }
+      }
     }.bind(this));
 
     this.socket.emit('view-game', {user: this.user});
@@ -253,6 +277,32 @@ export class GameComponent implements OnInit {
     console.log('sendChat:');
     this.socket.emit('send-chat', {player: this.user, chat: this.chatMessage});
     this.chatMessage = null;
+  }
+
+  openActionDialog(history) {
+    var data = _.cloneDeep(history);
+    data.user = this.user;
+    let dialogRef = this.dialog.open(GameActionDialog, {
+      width: '250px',
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('action dialog closed');
+    });
+  }
+
+  openChatDialog(history) {
+    var data = _.cloneDeep(history);
+    data.user = this.user;
+    let dialogRef = this.dialog.open(GameChatDialog, {
+      width: '250px',
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('chat dialog closed');
+    });
   }
 
   private clearActionData() {
