@@ -2,9 +2,10 @@
   {{ data.user }}
 </h1>
 <div mat-dialog-content>
-  Confirm your action?
+  Confirm your action? <br>
+  {{ data.action }}
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="confirmDialog()">Confirm</button>
+  <button mat-button [mat-dialog-close]="data">Confirm</button>
   <button mat-button (click)="declineDialog()">Decline</button>
 </div>

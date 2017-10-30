@@ -60,7 +60,7 @@ SERVER: false
 - [x] check on intermediate action and clear data after action completed
 - [x] store data in mlab for game history
 - [x] show modal dialog on chat / user action
-- [ ] support config to show chat / user action as setting and persist to local
-- [ ] support config to confirm / decline current action as setting and persist to local
+- [x] support config to show chat / user action as setting and persist to local
+- [x] support config to confirm / decline current action as setting and persist to local
 - [ ] data analytics on stored data
 - [ ] support inline emoji

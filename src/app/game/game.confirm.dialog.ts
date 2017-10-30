@@ -11,10 +11,6 @@ export class GameConfirmDialog {
     public dialogRef: MatDialogRef<GameConfirmDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  confirmDialog(): void {
-    this.dialogRef.close();
-  }
-
   declineDialog(): void {
     this.dialogRef.close();
   }

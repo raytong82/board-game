@@ -364,6 +364,11 @@ io.on('connection', function (socket) {
     io.emit('reset-game', game);
   });
 
+  socket.on('reload-game', function (data) {
+    console.log('reload-game:' + JSON.stringify(data));
+    socket.emit('reload-game', game);
+  });
+
   socket.on('clear-trade-cards', function (data) {
     console.log('clear-trade-cards:' + JSON.stringify(data));
     var player = _.find(game.players, function (p) {

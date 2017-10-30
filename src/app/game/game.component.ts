@@ -23,6 +23,9 @@ export class GameComponent implements OnInit {
   game: any = {scoreCards:[], tradeCards:[], publicScoreCards:[], publicTradeCards:[]};
   hideScoreCards: boolean = false;
   hideTradeCards: boolean = false;
+  popUpOnAction: boolean = true;
+  popUpOnChat: boolean = true;
+  popUpOnConfirm: boolean = false;
   message: string = '';
   upCount: number = 0; // free upgrade
   maxTo: number = 0; // set to transform
@@ -54,11 +57,9 @@ export class GameComponent implements OnInit {
       this.game = data;
 
       var lastHistory = _.last(this.game.histories);
-      if (lastHistory.player != this.user && this.joined) {
-        if (lastHistory.player != this.user && this.joined) {
-          if (lastHistory.action) {
-            this.openActionDialog(lastHistory);
-          }
+      if (lastHistory.player != this.user && this.joined && this.popUpOnAction) {
+        if (lastHistory.action) {
+          this.openActionDialog(lastHistory);
         }
       }
       this.checkEndGame();
@@ -82,15 +83,21 @@ export class GameComponent implements OnInit {
       this.game = data;
     }.bind(this));
 
+    this.socket.on('reload-game', function (data) {
+      console.log('reload-game:' + JSON.stringify(data));
+      this.game = data;
+      this.clearActionData();
+    }.bind(this));
+
     this.socket.on('send-chat', function (data) {
       console.log('send-chat:' + JSON.stringify(data));
       this.game.histories = data.histories;
 
       var lastHistory = _.last(this.game.histories);
       if (lastHistory.player != this.user && this.joined) {
-        if (lastHistory.action) {
+        if (lastHistory.action && this.popUpOnAction) {
           this.openActionDialog(lastHistory);
-        } else if (lastHistory.chat || lastHistory.emoji) {
+        } else if ((lastHistory.chat || lastHistory.emoji) && this.popUpOnChat) {
           this.openChatDialog(lastHistory);
         }
       }
@@ -156,6 +163,10 @@ export class GameComponent implements OnInit {
     var tradeCardIndex = _.findIndex(this.game.tradeCards, function(tradeCard) {
       return tradeCard.id == data.id;
     });
+    if (this.sumOfProperty(player.spice) < tradeCardIndex) {
+      console.log('not enough spice to handicap for picking trade card');
+      return;
+    }
     this.pendingPickTradeCard = data;
     if (tradeCardIndex != 0) {
       this.requiredHandicap = tradeCardIndex;
@@ -182,8 +193,12 @@ export class GameComponent implements OnInit {
       return;
     }
 
-    this.socket.emit('pick-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
-    this.clearActionData();
+    if (this.popUpOnConfirm) {
+      this.openConfirmDialog('pick-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
+    } else {
+      this.socket.emit('pick-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
+      this.clearActionData();
+    }
   }
 
   useTradeCard(data) {
@@ -229,8 +244,13 @@ export class GameComponent implements OnInit {
       this.pendingUseTradeCard = data;
       return;
     }
-    this.socket.emit('use-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
-    this.clearActionData();
+
+    if (this.popUpOnConfirm) {
+      this.openConfirmDialog('use-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
+    } else {
+      this.socket.emit('use-trade-card', {user: this.user, tradeCard: data, spice: player.spice});
+      this.clearActionData();
+    }
   }
 
   clickSpice(data) {
@@ -264,8 +284,12 @@ export class GameComponent implements OnInit {
     });
 
     this.upCount = 0;
-    this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-    this.clearActionData();
+    if (this.popUpOnConfirm) {
+      this.openConfirmDialog('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+    } else {
+      this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+      this.clearActionData();
+    }
   }
 
   sendEmoji(code) {
@@ -305,6 +329,28 @@ export class GameComponent implements OnInit {
     });
   }
 
+  openConfirmDialog(action, gameData) {
+    var data = {
+      user: this.user,
+      action: action,
+      gameData: gameData
+    };
+    let dialogRef = this.dialog.open(GameConfirmDialog, {
+      width: '250px',
+      data: data
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('confirm dialog closed: ' + JSON.stringify(result));
+        this.socket.emit(result.action, result.gameData);
+      } else {
+        this.socket.emit('reload-game', {});
+      }
+    });
+  }
+
+
   private clearActionData() {
       this.message = '';
       this.upCount = 0;
@@ -336,8 +382,12 @@ export class GameComponent implements OnInit {
     this.upCount -= 1;
 
     if (this.upCount <= 0) {
-      this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-      this.clearActionData();
+      if (this.popUpOnConfirm) {
+        this.openConfirmDialog('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+      } else {
+        this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+        this.clearActionData();
+      }
     }
   }
 
@@ -361,10 +411,18 @@ export class GameComponent implements OnInit {
 
     if (sumOfSpice <= 10) {
       if (this.pendingPickTradeCard != null) {
-        this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
-        this.handicapSpices = [];
+        if (this.popUpOnConfirm) {
+          this.openConfirmDialog('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
+        } else {
+          this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
+          this.handicapSpices = [];
+        }
       } else {
-        this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+        if (this.popUpOnConfirm) {
+          this.openConfirmDialog('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+        } else {
+          this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+        }
       }
       this.clearActionData();
     }
@@ -408,8 +466,12 @@ export class GameComponent implements OnInit {
         return;
       }
 
-      this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
-      this.clearActionData();
+      if (this.popUpOnConfirm) {
+        this.openConfirmDialog('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
+      } else {
+        this.socket.emit('pick-trade-card', {user: this.user, tradeCard: this.pendingPickTradeCard, handicapSpices: this.handicapSpices, spice: player.spice});
+        this.clearActionData();
+      }
     }
   }
 
@@ -441,16 +503,25 @@ export class GameComponent implements OnInit {
       return;
     }
 
-    this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
-    this.clearActionData();
+    if (this.popUpOnConfirm) {
+      this.openConfirmDialog('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+    } else {
+      this.socket.emit('use-trade-card', {user: this.user, tradeCard: this.pendingUseTradeCard, spice: player.spice});
+      this.clearActionData();
+    }
   }
 
   clearTradeCards() {
     if (this.user != this.game.playerTurn) {
       return;
     }
-    this.socket.emit('clear-trade-cards', {user: this.user});
-    this.clearActionData();
+
+    if (this.popUpOnConfirm) {
+      this.openConfirmDialog('clear-trade-cards', {user: this.user});
+    } else {
+      this.socket.emit('clear-trade-cards', {user: this.user});
+      this.clearActionData();
+    }
   }
 
   calTotalScore(player) {

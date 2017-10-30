@@ -413,6 +413,15 @@
               <input type="checkbox" [(ngModel)]="hideTradeCards" name="hide-trade-cards" value="hide-trade-cards"/>HIDE Trade Cards
             </div>
             <div class="form-group">
+              <input type="checkbox" [(ngModel)]="popUpOnAction" name="pop-up-on-action" value="pop-up-on-action"/>POP UP on other players' action
+            </div>
+            <div class="form-group">
+              <input type="checkbox" [(ngModel)]="popUpOnChat" name="pop-up-on-chat" value="pop-up-on-chat"/>POP UP on other players' chat
+            </div>
+            <div class="form-group">
+              <input type="checkbox" [(ngModel)]="popUpOnConfirm" name="pop-up-on-confirm" value="pop-up-on-confirm"/>POP UP to confirm action
+            </div>
+            <div class="form-group">
               <button type="submit" class="btn btn-success" [disabled]="!joinForm.form.valid">Join</button>
             </div>
           </form>
