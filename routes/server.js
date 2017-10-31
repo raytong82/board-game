@@ -201,8 +201,8 @@ var game = {
 };
 
 function initGame() {
-  var scoreCards = _.shuffle(SCORE_CARDS);
-  var tradeCards = _.shuffle(TRADE_CARDS);
+  var scoreCards = _.shuffle(_.cloneDeep(SCORE_CARDS));
+  var tradeCards = _.shuffle(_.cloneDeep(TRADE_CARDS));
   var goldCoins = 4;
   var silverCoins = 4;
   var players = _.shuffle(game.players);
