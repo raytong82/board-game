@@ -186,6 +186,7 @@ export class GameComponent implements OnInit {
       if (data.bonusSpices.brown) {
         player.spice.brown += data.bonusSpices.brown;
       }
+      data.bonusSpices = null;
     }
 
     var sumOfSpice = this.sumOfProperty(player.spice);
